@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[vjhawar's wall]]></title>
-  <link href="http://vjhawar.github.io/atom.xml" rel="self"/>
+  <title><![CDATA[Category: Leadership | vjhawar's wall]]></title>
+  <link href="http://vjhawar.github.io/blog/categories/leadership/atom.xml" rel="self"/>
   <link href="http://vjhawar.github.io/"/>
   <updated>2014-05-25T18:04:00+05:30</updated>
   <id>http://vjhawar.github.io/</id>
@@ -25,7 +25,7 @@
 
 <p>While career progression sometimes may end up being a conversation around working on broader technologies or an opportunity to work on a new project but in the long term it&rsquo;s not a fundamental progression. As you gain skills and maturity, its important that the team members reflect the same through their roles, responsibilities and behaviors consistently so that the company as a whole benefits in achieving it&rsquo;s goals. Below is a sample template for a developer track which could be used to define career progression at any organization, with what you value at which level in your organization.</p>
 
-<p><img class="center" src="http://vjhawar.github.io/images/banding_template.png" title="[600] [400] [[A template for developer career progression]]" ></p>
+<p><img class="center" src="/images/banding_template.png" title="[600] [400] [[A template for developer career progression]]" ></p>
 
 <h2>Some of the key highlights</h2>
 

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Motivation | vjhawar's wall]]></title>
+  <link href="http://vjhawar.github.io/blog/categories/motivation/atom.xml" rel="self"/>
+  <link href="http://vjhawar.github.io/"/>
+  <updated>2014-05-25T18:04:00+05:30</updated>
+  <id>http://vjhawar.github.io/</id>
+  <author>
+    <name><![CDATA[vipul jhawar]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Let's Build a City]]></title>
+    <link href="http://vjhawar.github.io/blog/2014/03/16/lets-build-a-city/"/>
+    <updated>2014-03-16T01:22:45+05:30</updated>
+    <id>http://vjhawar.github.io/blog/2014/03/16/lets-build-a-city</id>
+    <content type="html"><![CDATA[<p>A lot of times some people on your team may not be able to visualize the scale of the opportunity they have on their hands.
+How do you help them visualize the scale ?</p>
+
+<!--more-->
+
+
+<p>I presented an analogy on how building an internet scale project is similar to building a city.
+It&rsquo;s much easier to visualize building a city compared to a internet scale complex software with just architecture diagrams.</p>
+
+<iframe src="http://www.slideshare.net/slideshow/embed_code/32370046" width="427" 
+height="356" frameborder="0" marginwidth="0" marginheight="0" scrolling="no" 
+style="border:1px solid #CCC; border-width:1px 1px 0; margin-bottom:5px; max-width: 100%;" allowfullscreen> 
+</iframe>
+
+
+<p></p>
+
+<div style="margin-bottom:5px"> <strong> <a href="https://www.slideshare.net/VipulJhawar/lets-build-a-city-32370046" title="Let&#x27;s build a city" target="_blank">Let&#x27;s build a city</a> </strong> from <strong><a href="http://www.slideshare.net/VipulJhawar" target="_blank">Vipul Jhawar</a></strong> </div>
+
+]]></content>
+  </entry>
+  
+</feed>
