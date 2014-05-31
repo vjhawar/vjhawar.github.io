@@ -155,6 +155,89 @@ How do you help them visualize the scale ?</p>
 
     </article>
   
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2008/10/10/simple-scheduler-using-quartz/">Simple Scheduler Using Quartz</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2008-10-10T05:21:42+05:30" pubdate data-updated="true">Oct 10<span>th</span>, 2008</time>
+        
+           | <a href="/blog/2008/10/10/simple-scheduler-using-quartz/#disqus_thread"
+             data-disqus-identifier="http://vjhawar.github.io/blog/2008/10/10/simple-scheduler-using-quartz/">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>There are a lot of use cases which require running jobs aka units of repeatable tasks. The job may be required to run at runtime or at fixed regular intervals. Building a standard Java Scheduler server on top of Quartz is  pretty simple or you could use it as an embedded service in any of your current nodes, but the best use case is to have a separate Scheduler or Job Server as some people may call it, whose primary use is to exeute jobs. As jobs can involve long running transactions , be resource intensive or may span for long times it ensures that there is a clear functional sepration and are of responsibility of such a server. Having a dedicated Scheduler / Job server ensures that you are dealing with the cron hell and beyong point it becomes so difficult to keep track and audit of what is running where.</p>
+
+<p>Quartz is pretty stable and provides a neat api, and you could extend it a bit as well for some more custom stats and details. It provides options of a RAM Store or a DB Store. if you not worried about reliability and not worried about your jobs being lost or not being replayed on restart, then RAMStore based server may work fine for you.
+All you need to do is define your job mappings and trigger details in a config file and you are good to go.</p>
+
+<p>Make sure you implement a joblistener, this is done by extending the JobListenerSupport class and then initializing your scheduler with the joblistener support. The advantage with joblistener is that it provides you callback like api&rsquo;s for events such as jobToBeExecuted, jobExecutionVetoed and jobWasExecuted. You could use these callbacks to update your own status tables or do some auditing.</p>
+
+<p>The main core of the Quartz is the Scheduler interface which provides implementation for StandardScheduler. It has rich api&rsquo;s for adding, pausing, resuming jobs. Api&rsquo;s to manage the triggers and listeners as well and you could use these api&rsquo;s to to build a nifty web interface which could help you pause, resume some/all jobs as and when needed.</p>
+
+<p>You could expose your scheduler server over an RMI and automatically trigger jobs from other java servers by programtically managing the jobs. You could expose the server over http by embedding the service in a Resin or Tomcat and then managing the Job Server from a UI. We exposed the Scheduler server over RMI which allowed us to schedule jobs as part of some business updates, and then this made the job trigger and scheduling programmatic instead of manual interventions for some cases. We also exposed the available jobs and possible parameters from a UI, so that you could trigger a job on demand.</p>
+
+<p>Writing job in quartz is pretty simple as all you need to do is write an implementation for the Job interface and implement the execute() which provides you JobExecutionContext which contains all the Job data. However, it&rsquo;s always helpful for provide abstract implementations of some typical job types so that the developers just write the core logic. You could an abstract class</p>
+
+<p>abstract class BaseJob implements Job {</p>
+
+<pre><code>execute(JobExecutionContext context) {
+
+    try {
+            init();
+            doJob(context);
+        } catch (Exception e)
+        {
+            //do something if required, then wrap and throw JobExceutionException.
+        } finally {
+            onComplete();
+        }
+}
+
+init()
+{
+    //you may do some initialization, some standard logging, or maintain your own status.
+}
+
+abstract doJob(JobExecutionContext context)
+{
+    //this is what developers will implement when they need to write jobs.
+}
+
+onComplete()
+{
+    //if you always want to do something on job completion
+}
+</code></pre>
+
+<p>Other options could be to use abstract implementations of BaseJob which could be a DatabaseJob, which ensures the database transaction is opened and closed within the job lifecycle and you are not leaving it to the user to avoid leaks. It&rsquo;s very easy to throw exceptions and screw up other jobs or have leaking jobs and you will figure this out over time because your jobs will be running over intervals.</p>
+</div>
+  
+  
+
+
+    </article>
+  
   <div class="pagination">
     
     <a href="/blog/archives">Blog Archives</a>
@@ -173,6 +256,10 @@ How do you help them visualize the scale ?</p>
     
       <li class="post">
         <a href="/blog/2014/03/16/lets-build-a-city/">Let&#8217;s Build a City</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2008/10/10/simple-scheduler-using-quartz/">Simple Scheduler Using Quartz</a>
       </li>
     
   </ul>
