@@ -188,44 +188,12 @@ How do you help them visualize the scale ?</p>
 
   <div class="entry-content"><p>Hiring the right talent, at the right time with the right resources is key to any companies success. If you are not able to get your hiring plans on track and ensure that you are always hiring great people, it&rsquo;s going to get very challenging for you both internally and externally. I still feel hiring is still a lot of art than science and it needs a lot of focus and priority to get it right. While each company has it&rsquo;s own hiring strategy on the kind of talent it wants to pursue, it always helps to follow a lean hiring process which can move fast and be responsive to a candidate. If you really like someone, you should be able to seal the deal pretty quickly, rather than linger on due to process and productivity issues in your hiring team.</p>
 
-<p>One way to keep focus and priority on hiring is to make it transparent to all the stakeholders and participants. Most interviewers hate it when all they are told to just conduct an interview when a candidate arrives as if their job is just to do a round of intreview and then spit out the feedback. If you end up creating silos among your interviewers and decision makers, you will hardly make any good progress in hiring because each interviewer feels his job was just to do the interview and provide feedback. An interview should not just be an evaluation for a candidate, it should be an experience and if the interviewer treats it as a monotonous task, the candidate is not going to be excited about it. The best way is to open up the hiring details and progress to everyone and ensure that everyone who is part of hiring team is involved in the complete process and gets a complete update on where things stand. If we are not making progress on a key hire for a team A, and it&rsquo;s imperative we add capacity to Team A this quarter as we have over arching goals to achieve in this year, you need more partners to help you reach the goal then just executors who will do a task assigned to them. Hiring fails badly when it gets task oriented, so it&rsquo;s best to align each interviewer as a partner in your hiring process.</p>
-
-<p>A quick way to setup a simple workflow for hiring would be to use JIRA, if you are already using it in your company for an engineering project. JIRA is very powerful and you can quickly setup any custom workflow with required permissions in minutes and boom you are ready to go without buying any new fancy software. Setting up a kanban board in JIRA is a quick hack to get your hiring process transparent and ensure real time tracking of progress made on any position.</p>
-
-<p><img class="left" src="/images/hiring_flow.png" title="[728] [90] Hiring on kanban" ></p>
-
-<h4>What do you do</h4>
-
-<ul>
-<li>Setup a Kanban board for recruiting. A sample reference screenshot is shown above.</li>
-<li>Create columns as per your companies hiring process, each stage in the interview process would typically be a column on the board and you could have some additional columns to see specific status such as &ldquo;Resumes Rejected&rdquo;, &ldquo;Offer Dropouts&rdquo; as this are some areas you want to focus on if they have big count. If so, it requires a strategic intervention to get things right.</li>
-<li>You could create swimlanes for each position or a group of positions. This will help you see progress by each position or group. For e.g. in the screenshot above, we are tracking two separate positions.</li>
-<li>Define filters on top as per your requirements. These could be By location, By date, By state, By date range etc.</li>
-<li>Setup an email such that any resume that comes in the company is sent to a JIRA project and depending on how you have structured your swimlanes it will autmatically land in the INBOX column for that psition.</li>
-<li>Have a meeting among the hiring team members, and set the rules of the game. Every body checks and assigns the tasks as per workflow, and updates the feedback on the JIRA task assigned to them.</li>
-</ul>
-
-
-<h4>How does it help</h4>
-
-<ul>
-<li>If any particular particiapting function or person is bottleneck in the current pipeline, it would instantly show up on the board.</li>
-<li>If you are seeing too many offer dropouts, you know something is wrong.</li>
-<li>If you are seeing too many resumes getting rejected, it means your sourcing is not right and your team is spending valuable time on rejecting resumes.</li>
-<li>If your scheduling or initial screening is blocking the progress, you can now ask difficult questions to your talent partners.</li>
-<li>Having the whole activity being updated in real time helps everyone in the team and you don&rsquo;t end up doing useless meetings on tracking status. Also, each task has an assignee at any moment of time and people know what is coming along their way next.</li>
-<li>With everybody&rsquo;s comments on the task, its easy to reach a decision.</li>
-<li>People come up with ideas in order to solve bottlenecks in the pipeline because now they may feel part of the process rather than being a hop in the process as was happening previously.</li>
-</ul>
-
-
-<p>If you are not using JIRA, you could also use Asana to setup a quick hiring workflow for your team as per &ndash; [Recruiting and applicant tracking] (<a href="https://asana.com/guide/explore/workflow/customize">https://asana.com/guide/explore/workflow/customize</a>)</p>
-
-<p><img class="left" src="/images/hiring_flow_asana.png" title="Hiring on Asana" ></p>
-
-<p>Ensuring a lean and transparent process using some productive tools can go a long way in helping you hire the right talent. If you are not being productive in hiring, you will end up wasting more time of your key engineers on interviewing more people than deliver products because there is a high chance that the candidate you liked has been shortlisted by some more companies and if you are not tracking and moving fast, you will lose a great potential hire whom your team really wanted on board.</p>
 </div>
   
+  
+    <footer>
+      <a rel="full-article" href="/blog/2012/03/08/quickly-setup-a-hiring-workflow/">Read on &rarr;</a>
+    </footer>
   
 
 
@@ -264,87 +232,12 @@ How do you help them visualize the scale ?</p>
 
   <div class="entry-content"><p>There are a lot of use cases which require running jobs aka units of repeatable tasks. The job may be required to run at runtime or at fixed regular intervals. Building a standard Java Scheduler server on top of Quartz is  pretty simple or you could use it as an embedded service in any of your current nodes, but the best use case is to have a separate Scheduler or Job Server as some people may call it, whose primary use is to exeute jobs. As jobs can involve long running transactions , be resource intensive or may span for long times it ensures that there is a clear functional sepration and are of responsibility of such a server. Having a dedicated Scheduler / Job server ensures that you are dealing with the cron hell and beyong point it becomes so difficult to keep track and audit of what is running where.</p>
 
-<p>Quartz is pretty stable and provides a neat api, and you could extend it a bit as well for some more custom stats and details. It provides options of a RAM Store or a DB Store. if you not worried about reliability and not worried about your jobs being lost or not being replayed on restart, then RAMStore based server may work fine for you.
-All you need to do is define your job mappings and trigger details in a config file and you are good to go.</p>
-
-<p>Make sure you implement a joblistener, this is done by extending the JobListenerSupport class and then initializing your scheduler with the joblistener support. The advantage with joblistener is that it provides you callback like api&rsquo;s for events such as jobToBeExecuted, jobExecutionVetoed and jobWasExecuted. You could use these callbacks to update your own status tables or do some auditing.</p>
-
-<p>The main core of the Quartz is the Scheduler interface which provides implementation for StandardScheduler. It has rich api&rsquo;s for adding, pausing, resuming jobs. Api&rsquo;s to manage the triggers and listeners as well and you could use these api&rsquo;s to to build a nifty web interface which could help you pause, resume some/all jobs as and when needed.</p>
-
-<p>You could expose your scheduler server over an RMI and automatically trigger jobs from other java servers by programtically managing the jobs. You could expose the server over http by embedding the service in a Resin or Tomcat and then managing the Job Server from a UI. We exposed the Scheduler server over RMI which allowed us to schedule jobs as part of some business updates, and then this made the job trigger and scheduling programmatic instead of manual interventions for some cases. We also exposed the available jobs and possible parameters from a UI, so that you could trigger a job on demand.</p>
-
-<p>Writing job in quartz is pretty simple as all you need to do is write an implementation for the Job interface and implement the execute() which provides you JobExecutionContext which contains all the Job data. However, it&rsquo;s always helpful for provide abstract implementations of some typical job types so that the developers just write the core logic.</p>
-
-<p>You could have an abstract class BaseJob as</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-<span class='line-number'>28</span>
-<span class='line-number'>29</span>
-<span class='line-number'>30</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>
-</span><span class='line'>abstract class BaseJob implements Job {
-</span><span class='line'>    
-</span><span class='line'>    execute(JobExecutionContext context) {
-</span><span class='line'>            
-</span><span class='line'>        try {
-</span><span class='line'>                init();
-</span><span class='line'>                doJob(context);
-</span><span class='line'>            } catch (Exception e)
-</span><span class='line'>            {
-</span><span class='line'>                //do something if required, then wrap and throw JobExceutionException.
-</span><span class='line'>            } finally {
-</span><span class='line'>                onComplete();
-</span><span class='line'>            }
-</span><span class='line'>    }
-</span><span class='line'>
-</span><span class='line'>    init()
-</span><span class='line'>    {
-</span><span class='line'>        //you may do some initialization, some standard logging, or maintain your own status.
-</span><span class='line'>    }
-</span><span class='line'>
-</span><span class='line'>    abstract doJob(JobExecutionContext context)
-</span><span class='line'>    {
-</span><span class='line'>        //this is what developers will implement when they need to write jobs.
-</span><span class='line'>    }
-</span><span class='line'>
-</span><span class='line'>    onComplete()
-</span><span class='line'>    {
-</span><span class='line'>        //if you always want to do something on job completion
-</span><span class='line'>    }
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p></p>
-
-<p>Other options could be to use abstract implementations of BaseJob which could be a DatabaseJob, which ensures the database transaction is opened and closed within the job lifecycle and you are not leaving it to the user to avoid leaks. It&rsquo;s very easy to throw exceptions and screw up other jobs or have leaking jobs and you will figure this out over time because your jobs will be running over intervals.</p>
 </div>
   
+  
+    <footer>
+      <a rel="full-article" href="/blog/2008/10/10/simple-scheduler-using-quartz/">Read on &rarr;</a>
+    </footer>
   
 
 

@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Software | vjhawar's wall]]></title>
   <link href="http://vjhawar.github.io/blog/categories/software/atom.xml" rel="self"/>
   <link href="http://vjhawar.github.io/"/>
-  <updated>2014-06-01T18:26:07+05:30</updated>
+  <updated>2014-06-01T18:28:04+05:30</updated>
   <id>http://vjhawar.github.io/</id>
   <author>
     <name><![CDATA[vipul jhawar]]></name>
@@ -19,6 +19,9 @@
     <updated>2008-10-10T05:21:42+05:30</updated>
     <id>http://vjhawar.github.io/blog/2008/10/10/simple-scheduler-using-quartz</id>
     <content type="html"><![CDATA[<p>There are a lot of use cases which require running jobs aka units of repeatable tasks. The job may be required to run at runtime or at fixed regular intervals. Building a standard Java Scheduler server on top of Quartz is  pretty simple or you could use it as an embedded service in any of your current nodes, but the best use case is to have a separate Scheduler or Job Server as some people may call it, whose primary use is to exeute jobs. As jobs can involve long running transactions , be resource intensive or may span for long times it ensures that there is a clear functional sepration and are of responsibility of such a server. Having a dedicated Scheduler / Job server ensures that you are dealing with the cron hell and beyong point it becomes so difficult to keep track and audit of what is running where.</p>
+
+<!--more-->
+
 
 <p>Quartz is pretty stable and provides a neat api, and you could extend it a bit as well for some more custom stats and details. It provides options of a RAM Store or a DB Store. if you not worried about reliability and not worried about your jobs being lost or not being replayed on restart, then RAMStore based server may work fine for you.
 All you need to do is define your job mappings and trigger details in a config file and you are good to go.</p>
