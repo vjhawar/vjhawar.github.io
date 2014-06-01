@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Software | vjhawar's wall]]></title>
   <link href="http://vjhawar.github.io/blog/categories/software/atom.xml" rel="self"/>
   <link href="http://vjhawar.github.io/"/>
-  <updated>2014-06-01T18:16:33+05:30</updated>
+  <updated>2014-06-01T18:26:07+05:30</updated>
   <id>http://vjhawar.github.io/</id>
   <author>
     <name><![CDATA[vipul jhawar]]></name>
@@ -29,7 +29,11 @@ All you need to do is define your job mappings and trigger details in a config f
 
 <p>You could expose your scheduler server over an RMI and automatically trigger jobs from other java servers by programtically managing the jobs. You could expose the server over http by embedding the service in a Resin or Tomcat and then managing the Job Server from a UI. We exposed the Scheduler server over RMI which allowed us to schedule jobs as part of some business updates, and then this made the job trigger and scheduling programmatic instead of manual interventions for some cases. We also exposed the available jobs and possible parameters from a UI, so that you could trigger a job on demand.</p>
 
-<p>Writing job in quartz is pretty simple as all you need to do is write an implementation for the Job interface and implement the execute() which provides you JobExecutionContext which contains all the Job data. However, it&rsquo;s always helpful for provide abstract implementations of some typical job types so that the developers just write the core logic. You could an abstract class</p>
+<p>Writing job in quartz is pretty simple as all you need to do is write an implementation for the Job interface and implement the execute() which provides you JobExecutionContext which contains all the Job data. However, it&rsquo;s always helpful for provide abstract implementations of some typical job types so that the developers just write the core logic.</p>
+
+<p>You could have an abstract class BaseJob as</p>
+
+<p>```</p>
 
 <p>abstract class BaseJob implements Job {</p>
 
@@ -61,6 +65,8 @@ onComplete()
     //if you always want to do something on job completion
 }
 </code></pre>
+
+<p>```</p>
 
 <p>Other options could be to use abstract implementations of BaseJob which could be a DatabaseJob, which ensures the database transaction is opened and closed within the job lifecycle and you are not leaving it to the user to avoid leaks. It&rsquo;s very easy to throw exceptions and screw up other jobs or have leaking jobs and you will figure this out over time because your jobs will be running over intervals.</p>
 ]]></content>
