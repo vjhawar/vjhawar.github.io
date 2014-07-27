@@ -4,7 +4,7 @@
   <title><![CDATA[vjhawar's wall]]></title>
   <link href="http://vjhawar.github.io/atom.xml" rel="self"/>
   <link href="http://vjhawar.github.io/"/>
-  <updated>2014-07-28T01:00:09+05:30</updated>
+  <updated>2014-07-28T01:25:14+05:30</updated>
   <id>http://vjhawar.github.io/</id>
   <author>
     <name><![CDATA[vipul jhawar]]></name>
@@ -39,7 +39,7 @@ The other fact which distinguishes ad tech from many other large scale applicati
 <h3>Some of the points where aerospike helped</h3>
 
 <blockquote><ul>
-<li>Lesser number of server&rsquo;s needed to be deployed and maintained as each one is a master in itself, rather than having write and read master. No matter how easy or configurable the sharding is, there is value in keeping your setup, deployment simple and your developers need not worry about underlying storage criteria.</li>
+<li>Lesser number of server&rsquo;s needed to be deployed and maintained. Also as each one is a master in itself, rather than having write and read master it does simplify your setup. No matter how easy or configurable the sharding is, there is value in keeping your setup, deployment simple and your developers need not worry about underlying storage criteria and the eventual sync.</li>
 <li>An almost load balanced cluster. Aerospike&rsquo;s almost consistent hashing across the nodes ensured that you end up with an almost laod balanced cluster and this usually helps getting consistent performance for your reads/writes as you dont end up with localization. It also ensures that most likely your hot data is also spread across the cluster and you are not likely to see a sudden degrade in performance because of localized hot data. This also pushes for similar config on your hardware and it always helps when you have setup hardware which is consistent across all nodes, so a well spread out data across equally capable nodes leads to a much more predictable performance than trying to run nodes with hetrogeneous configs.</li>
 <li>Setting up for eventual consistency than immediate consistency is not an easy decision to make for newer components, sometimes you make a quick choice within current constraints to live with eventual consistency but it just make things simpler if you can get the required throughput with immediate consistency and not have to worry modelling your cases around eventual consistency.</li>
 <li>Built in rebalancing in case of node failure which is critical for uptime.</li>
@@ -60,7 +60,7 @@ The other fact which distinguishes ad tech from many other large scale applicati
 <li>While we have the aerospike monitoring console, it seems to use browser as a cache for the throuhput histogram data and you cant see last 30 minutes data if your browser window was not open during last 30 mins. You typically need to see monitoring data from when you want, so having this support inbuilt in the AMC would be more helpful.</li>
 <li>You ideally need inbuilt support for notification/alert integration for tools such as nagios. Currently they display notifications on the AMC, but that&rsquo;s not enough and we faced some challenges integrating with the nagios plugin.</li>
 <li>Having an ability of a separate sandbox which could be deployed on a separate node to run AQL and read only AS Monitor commands is much preferred. I have not spent enough time to see if it&rsquo;s possible but you typically want developers to be restricted away from logging onto the main box for security reasons.</li>
-<li>Aerospike mentions about indexed map reduce, but not sure how of it is practical as if the compute for it executes on the same node then there is already a limitation to the point which you can scale it.</li>
+<li>Aerospike mentions about indexed map reduce, but not sure how far it can go compared to the regular scalability of the map reduce as the compute for it executes on the same node, then there is already a limitation to the point which you can scale it.</li>
 </ul>
 </blockquote>
 
