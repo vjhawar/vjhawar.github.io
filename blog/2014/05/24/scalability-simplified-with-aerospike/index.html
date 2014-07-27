@@ -1,0 +1,357 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Scalability Simplified With Aerospike - vjhawar's wall</title>
+  <meta name="author" content="vipul jhawar">
+
+  
+  <meta name="description" content="Ad tech is one of those categories where dealing with scale at low latency is key to running your business. It&rsquo;s simply impossible to grow &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://vjhawar.github.io/blog/2014/05/24/scalability-simplified-with-aerospike">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="vjhawar's wall" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">vjhawar's wall</a></h1>
+  
+    <h2>We can't change history, but we can change the future.</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="https://www.google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:vjhawar.github.io" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Scalability Simplified With Aerospike</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-05-24T00:27:24+05:30" pubdate data-updated="true">May 24<span>th</span>, 2014</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>Ad tech is one of those categories where dealing with scale at low latency is key to running your business. It&rsquo;s simply impossible to grow without building each and every component for scale because in the end if you cannot complete your transaction in a few milliseconds, you will be trumped no matter how great you are at other things.
+The other fact which distinguishes ad tech from many other large scale application is that ad tech is also a write/update intensive system. With video advertising the number of events triggred per impression have increased manifold compared to a classic display ad. The high amount of read and writes makes the process of narrowing down components for your subsystem more important and critical for long term because a lot of software written today has low shelf life which is not a great. If you compare ad tech to a typical social or ecommerce platform, I am sure the number of primary reads v/s the writes would be much higher for the minimal business transaction.</p>
+
+<!-- more -->
+
+
+<p>As the requirement of a large, distributed key-value hash is now common across all internet scale deployments nowadays, Ad tech since a long time back had the need and was dealing with large number of user profiles, url&rsquo;s, user-agent strings, domain&rsquo;s, IP&rsquo;s, partner data etc and some of these were directly looked up and the decision after the whole lookup needed to complete in milliseconds because you cannot have the ad served too long after the user has been on the page and RTB made it more stringent than just ad serving.</p>
+
+<br/>
+
+
+<p>Aerospike provided both performance and consistency along with breakneck performance on SSD&rsquo;s which is the first criteria for ad tech. The other important point is that aerospike&rsquo;s performance is not just great for a read heavy scenario but also for write&rsquo;s. While different applications may choose speed over consistency but having to deal with inconsistency, the discrepancies that may result as an after effect and check pointing from when things became fine again is a tedious task and is preferably avoided.</p>
+
+<p>One of the use cases to deploy aerospike was to scale out a large scale url cache which was fed from both the ad serving and the contextulaization engine and typically needs to be used for making every decision when you are serving an ad on the page. Deploying the cache on aerospike solved many of our problems including time outs, warming up on restarts, keep scaling out to reads and writes, ability to have secondary indexes if needed, consistency without compromising for speed, load balanced cluster, distributed processing at node level and be able to maintain uptime in case of a node failure etc.</p>
+
+<br/>
+
+
+<p>Some of the points where aerospike helped.</p>
+
+<h1>Lesser number of server&rsquo;s needed to be deployed and maintained as each one is a master in itself, rather than having write and read master. No matter how easy or configurable the sharding is, there is value in keeping your setup, deployment simple and your developers need not worry about underlying storage criteria.</h1>
+
+<h1>An almost load balanced cluster. Aerospike&rsquo;s almost consistent hashing across the nodes ensured that you end up with an almost laod balanced cluster and this usually helps getting consistent performance for your reads/writes as you dont end up with localization. It also ensures that most likely your hot data is also spread across the cluster and you are not likely to see a sudden degrade in performance because of localized hot data. This also pushes for similar config on your hardware and it always helps when you have setup hardware which is consistent across all nodes, so a well spread out data across equally capable nodes leads to a much more predictable performance than trying to run nodes with hetrogeneous configs.</h1>
+
+<h1>Setting up for eventual consistency than immediate consistency is not an easy decision to make for newer components, sometimes you make a quick choice within current constraints to live with eventual consistency but it just make things simpler if you can get the required throughput with immediate consistency and not have to worry modelling your cases around eventual consistency.</h1>
+
+<h1>Built in rebalancing in case of node failure which is critical for uptime.</h1>
+
+<h1>Low latency even on high write or balanced read/write use case.</h1>
+
+<h1>As SSD storage is becoming a standard and the pricing keeps coming down, getting reliable performance from a storage is always preferable over RAM. You could typically have your data replicated over large in memory clusters and claim that all will not fail at the same time but then the cost is a hindrance.</h1>
+
+<h1>Aerospike scales pretty well with SSD as they have it optimized for SSD storage. This is not the case with many other key-value stores as some are heavily dependent on RAM or async flush to get high throughput. Comparing SSD density v/s RAM for storage and the storage cost per GB is lesser in SSD against RAM, so any database which could exploit performance on SSD&rsquo;s was helpful and Aerospike does the same.</h1>
+
+<h1>Dealing with bursts &ndash; It could happen that you suddenly have to deal with bursts and you are not provisioned for it. It needs to be seen how well a RAM only store compares to SSD in case of bursts as this would involve churning out older data to make place for the new one and if your RAM based store is built on JVM then GC overheads do kick in. Aerospike claims to have decent throughput even in case of bursts.</h1>
+
+<br/>
+
+
+<p>Some points which need attention</p>
+
+<h1>Need Lua for scripting. Lua is great, but someone needs to do it and developer interest is limited if it&rsquo;s only for one use case unless it&rsquo;s used for more use cases in your setup.</h1>
+
+<h1>While we have the aerospike monitoring console, it seems to use browser as a cache for the throuhput histogram data and you cant see last 30 minutes data if your browser window was not open during last 30 mins. You typically need to see monitoring data from when you want, so having this support inbuilt in the AMC would be more helpful.</h1>
+
+<h1>You ideally need inbuilt support for notification/alert integration for tools such as nagios. Currently they display notifications on the AMC, but that&rsquo;s not enough and we faced some challenges integrating with the nagios plugin.</h1>
+
+<h1>Having an ability of a separate sandbox which could be deployed on a separate node to run AQL and read only AS Monitor commands is much preferred. I have not spent enough time to see if it&rsquo;s possible but you typically want developers to be restricted away from logging onto the main box for security reasons.</h1>
+
+<p>A lot of companies have deployed other key value stores and tuned them to their requirements but our experience with aerospike clearly demonstrated that it is built to solve problems of scale without requiring too much out of the box tuning at start and had all the basic elements to get you going on production pretty quickly.</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">vipul jhawar</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-05-24T00:27:24+05:30" pubdate data-updated="true">May 24<span>th</span>, 2014</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/aerospike/'>aerospike</a>, <a class='category' href='/blog/categories/engineering/'>engineering</a>, <a class='category' href='/blog/categories/scalability/'>scalability</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://vjhawar.github.io/blog/2014/05/24/scalability-simplified-with-aerospike/" data-via="vjhawar" data-counturl="http://vjhawar.github.io/blog/2014/05/24/scalability-simplified-with-aerospike/" >Tweet</a>
+  
+  
+  <div class="g-plusone" data-size="medium"></div>
+  
+  
+    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2014/05/01/career-progression-how-to-contribute-more/" title="Previous Post: Career progression - How to contribute more ?">&laquo; Career progression - How to contribute more ?</a>
+      
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2014/05/24/scalability-simplified-with-aerospike/">Scalability Simplified With Aerospike</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/05/01/career-progression-how-to-contribute-more/">Career Progression - How to Contribute More ?</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/03/16/lets-build-a-city/">Let's Build a City</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/03/08/quickly-setup-a-hiring-workflow/">Productivity Tip - Quickly Setup a Simple Hiring Workflow</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/01/06/how-to-live-and-not-just-make-a-living/">How to Live and Not Just Make a Living</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2008/10/10/simple-scheduler-using-quartz/">Simple Scheduler Using Quartz</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>On Twitter</h1>
+  <div id="twitter-profile" style="margin-top:0.5em;">
+    <p>
+      <strong>vipul jhawar</strong> 
+      (<a href="http://twitter.com/vjhawar">@vjhawar</a>)
+    </p>
+    <p></p>
+  </div>
+  <script type="text/javascript">
+    $(function(){
+        var container = $('#twitter-profile'),
+            user = "vjhawar";
+        
+        function parseTwLinks(s) {
+          var twUrl = "http://www.twitter.com/"
+          s = s.replace(/ (@([\w]+))/g, function(match, p1, p2) {
+              return " <a href='"+twUrl+p2+"'>"+p1+"</a>"
+          }).replace(/ (#([\w]+))/g, function(match, p1, p2) {
+              return " <a href='"+twUrl+"#!/search?q=%23"+p2+"'>"+p1+"</a>"
+          })
+          return s
+        }
+
+        $.ajax({
+            url: "http://api.twitter.com/1/users/show.json?include_entities=false&screen_name="+user+"&callback=?"
+          , type: 'GET'
+          , dataType: 'jsonp'
+          , error: function (err) { $('#twitter-profile').addClass('error');  }
+          , success: function(data) {
+              container.html('<img class="left" src="http://api.twitter.com/1/users/profile_image/'+user+'.json?size=bigger" alt="@'+user+'"><p><strong>'+data.name+'</strong> (<a href="http://twitter.com/'+user+'">@'+user+'</a>)<br/>'+data.location+'</p><p>'+parseTwLinks(data.description)+'</p>');
+            }
+        })
+      });
+  </script>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/vjhawar">@vjhawar</a> on GitHub
+  
+  <script type="text/javascript">
+    $(document).ready(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'vjhawar',
+            count: 0,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2014 - vipul jhawar -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id; js.async = true;
+  js.src = "//connect.facebook.net/en_US/all.js#appId=212934732101925&xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
+      script.src = 'https://apis.google.com/js/plusone.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
+    })();
+  </script>
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

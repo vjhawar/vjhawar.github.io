@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Scalability | vjhawar's wall]]></title>
+  <link href="http://vjhawar.github.io/blog/categories/scalability/atom.xml" rel="self"/>
+  <link href="http://vjhawar.github.io/"/>
+  <updated>2014-07-28T00:51:36+05:30</updated>
+  <id>http://vjhawar.github.io/</id>
+  <author>
+    <name><![CDATA[vipul jhawar]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Scalability Simplified With Aerospike]]></title>
+    <link href="http://vjhawar.github.io/blog/2014/05/24/scalability-simplified-with-aerospike/"/>
+    <updated>2014-05-24T00:27:24+05:30</updated>
+    <id>http://vjhawar.github.io/blog/2014/05/24/scalability-simplified-with-aerospike</id>
+    <content type="html"><![CDATA[<p>Ad tech is one of those categories where dealing with scale at low latency is key to running your business. It&rsquo;s simply impossible to grow without building each and every component for scale because in the end if you cannot complete your transaction in a few milliseconds, you will be trumped no matter how great you are at other things.
+The other fact which distinguishes ad tech from many other large scale application is that ad tech is also a write/update intensive system. With video advertising the number of events triggred per impression have increased manifold compared to a classic display ad. The high amount of read and writes makes the process of narrowing down components for your subsystem more important and critical for long term because a lot of software written today has low shelf life which is not a great. If you compare ad tech to a typical social or ecommerce platform, I am sure the number of primary reads v/s the writes would be much higher for the minimal business transaction.</p>
+
+<!-- more -->
+
+
+<p>As the requirement of a large, distributed key-value hash is now common across all internet scale deployments nowadays, Ad tech since a long time back had the need and was dealing with large number of user profiles, url&rsquo;s, user-agent strings, domain&rsquo;s, IP&rsquo;s, partner data etc and some of these were directly looked up and the decision after the whole lookup needed to complete in milliseconds because you cannot have the ad served too long after the user has been on the page and RTB made it more stringent than just ad serving.</p>
+
+<br/>
+
+
+<p>Aerospike provided both performance and consistency along with breakneck performance on SSD&rsquo;s which is the first criteria for ad tech. The other important point is that aerospike&rsquo;s performance is not just great for a read heavy scenario but also for write&rsquo;s. While different applications may choose speed over consistency but having to deal with inconsistency, the discrepancies that may result as an after effect and check pointing from when things became fine again is a tedious task and is preferably avoided.</p>
+
+<p>One of the use cases to deploy aerospike was to scale out a large scale url cache which was fed from both the ad serving and the contextulaization engine and typically needs to be used for making every decision when you are serving an ad on the page. Deploying the cache on aerospike solved many of our problems including time outs, warming up on restarts, keep scaling out to reads and writes, ability to have secondary indexes if needed, consistency without compromising for speed, load balanced cluster, distributed processing at node level and be able to maintain uptime in case of a node failure etc.</p>
+
+<br/>
+
+
+<p>Some of the points where aerospike helped.</p>
+
+<h1>Lesser number of server&rsquo;s needed to be deployed and maintained as each one is a master in itself, rather than having write and read master. No matter how easy or configurable the sharding is, there is value in keeping your setup, deployment simple and your developers need not worry about underlying storage criteria.</h1>
+
+<h1>An almost load balanced cluster. Aerospike&rsquo;s almost consistent hashing across the nodes ensured that you end up with an almost laod balanced cluster and this usually helps getting consistent performance for your reads/writes as you dont end up with localization. It also ensures that most likely your hot data is also spread across the cluster and you are not likely to see a sudden degrade in performance because of localized hot data. This also pushes for similar config on your hardware and it always helps when you have setup hardware which is consistent across all nodes, so a well spread out data across equally capable nodes leads to a much more predictable performance than trying to run nodes with hetrogeneous configs.</h1>
+
+<h1>Setting up for eventual consistency than immediate consistency is not an easy decision to make for newer components, sometimes you make a quick choice within current constraints to live with eventual consistency but it just make things simpler if you can get the required throughput with immediate consistency and not have to worry modelling your cases around eventual consistency.</h1>
+
+<h1>Built in rebalancing in case of node failure which is critical for uptime.</h1>
+
+<h1>Low latency even on high write or balanced read/write use case.</h1>
+
+<h1>As SSD storage is becoming a standard and the pricing keeps coming down, getting reliable performance from a storage is always preferable over RAM. You could typically have your data replicated over large in memory clusters and claim that all will not fail at the same time but then the cost is a hindrance.</h1>
+
+<h1>Aerospike scales pretty well with SSD as they have it optimized for SSD storage. This is not the case with many other key-value stores as some are heavily dependent on RAM or async flush to get high throughput. Comparing SSD density v/s RAM for storage and the storage cost per GB is lesser in SSD against RAM, so any database which could exploit performance on SSD&rsquo;s was helpful and Aerospike does the same.</h1>
+
+<h1>Dealing with bursts &ndash; It could happen that you suddenly have to deal with bursts and you are not provisioned for it. It needs to be seen how well a RAM only store compares to SSD in case of bursts as this would involve churning out older data to make place for the new one and if your RAM based store is built on JVM then GC overheads do kick in. Aerospike claims to have decent throughput even in case of bursts.</h1>
+
+<br/>
+
+
+<p>Some points which need attention</p>
+
+<h1>Need Lua for scripting. Lua is great, but someone needs to do it and developer interest is limited if it&rsquo;s only for one use case unless it&rsquo;s used for more use cases in your setup.</h1>
+
+<h1>While we have the aerospike monitoring console, it seems to use browser as a cache for the throuhput histogram data and you cant see last 30 minutes data if your browser window was not open during last 30 mins. You typically need to see monitoring data from when you want, so having this support inbuilt in the AMC would be more helpful.</h1>
+
+<h1>You ideally need inbuilt support for notification/alert integration for tools such as nagios. Currently they display notifications on the AMC, but that&rsquo;s not enough and we faced some challenges integrating with the nagios plugin.</h1>
+
+<h1>Having an ability of a separate sandbox which could be deployed on a separate node to run AQL and read only AS Monitor commands is much preferred. I have not spent enough time to see if it&rsquo;s possible but you typically want developers to be restricted away from logging onto the main box for security reasons.</h1>
+
+<p>A lot of companies have deployed other key value stores and tuned them to their requirements but our experience with aerospike clearly demonstrated that it is built to solve problems of scale without requiring too much out of the box tuning at start and had all the basic elements to get you going on production pretty quickly.</p>
+]]></content>
+  </entry>
+  
+</feed>
